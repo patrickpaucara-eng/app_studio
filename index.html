@@ -22,7 +22,7 @@ textarea,input{width:100%;font:inherit;color:inherit;background:var(--surface);b
 <script>
 (function(){
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
-  function start(d){window.__D=d;var s=document.createElement('script');s.src='app.js?v=1';document.body.appendChild(s)}
+  function start(d){window.__D=d;var s=document.createElement('script');s.src='app.js?v=2';document.body.appendChild(s)}
   var cached=null;try{cached=JSON.parse(localStorage.getItem('atenea-data')||'null')}catch(e){}
   if(cached){start(cached);return}
   fetch('data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem('atenea-data',JSON.stringify(d))}catch(e){}start(d)})

@@ -72,7 +72,7 @@ function rate(g){
   if(nc.due-now<20*6e4)S.q.splice(Math.min(S.q.length,4),0,c.id),S.total++;
   S.done++; if(g>=3)S.ok++; next();
 }
-function end(){ if(!S){home();return} var r=S.done; app.innerHTML='<section class="c"><h1>'+r+' tarjetas repasadas</h1><p class="m">'+(r?Math.round(100*S.ok/r)+'% recordadas. ':'')+'Tu progreso quedó guardado en este dispositivo.</p><div class="r"><button class="p" onclick="S=null;home()">Volver</button></div></section>'; }
+function end(){ setTimeout(autoSyncPhone,300); if(!S){home();return} var r=S.done; app.innerHTML='<section class="c"><h1>'+r+' tarjetas repasadas</h1><p class="m">'+(r?Math.round(100*S.ok/r)+'% recordadas. ':'')+'Tu progreso quedó guardado en este dispositivo.</p><div class="r"><button class="p" onclick="S=null;home()">Volver</button></div></section>'; }
 function browse(k){
   var co=CO[k]; var cs=D.cards.filter(function(c){return c.k===k});
   app.innerHTML='<div class="r"><button onclick="home()">← Volver</button></div><section class="c"><h2>'+esc(co.nombre)+'</h2>'+((co.estrategia||[]).length?'<ul class="s">'+co.estrategia.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>':'')+
@@ -102,6 +102,17 @@ async function sendProgress(btn){
   }catch(e){alert(e.message||'No se pudo enviar. Revisa tu internet.')}
   home();
 }
+async function autoSyncPhone(){
+  if(navigator.onLine===false||!D)return;
+  var g=ghCfg();
+  if(g.token&&D.repo&&(ST.events.length||ST.dudas.length||ST.newCards.some(function(n){return !n.sent}))){
+    try{var r=await fetch('https://api.github.com/repos/'+D.repo+'/contents/progreso/'+ST.syncId+'.json',{method:'PUT',headers:{'Authorization':'Bearer '+g.token,'Accept':'application/vnd.github+json'},body:JSON.stringify({message:'Progreso del celular '+day(),content:b64(JSON.stringify(progressObj()))})});
+      if(r.ok||r.status===422){ST.events=[];ST.dudas=[];ST.newCards.forEach(function(n){n.sent=1});ST.syncId='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);ST.lastSent=Date.now();save()}}catch(e){}
+  }
+  try{var q=await fetch('data.json?t='+Date.now(),{cache:'no-store'});if(q.ok){var d=await q.json();if(d&&d.exportId&&d.exportId!==D.exportId){localStorage.setItem('atenea-data',JSON.stringify(d));if(!S)location.reload()}}}catch(e){}
+}
+window.addEventListener('online',function(){autoSyncPhone()});
+setTimeout(autoSyncPhone,1500);
 async function refreshData(btn){
   if(navigator.onLine===false){alert('Sin internet: sigues con las tarjetas que ya tienes.');return}
   if(btn){btn.disabled=true;btn.textContent='Buscando…'}
