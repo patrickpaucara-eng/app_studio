@@ -1,0 +1,1 @@
+{"name": "Atenea Estudio", "short_name": "Atenea", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#0E131A", "theme_color": "#2C47C4", "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]}

@@ -1,0 +1,31 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Atenea</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2C47C4"><link rel="icon" href="icon.svg">
+<style>
+:root{--paper:#F3F5F8;--surface:#fff;--sunk:#E9EDF3;--ink:#17202C;--muted:#5B6677;--line:#D9DEE6;--accent:#2C47C4;--on:#fff;--good:#1D8A57;--warn:#A86A12;--bad:#BE3A33;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--paper:#0E131A;--surface:#161D27;--sunk:#1D2633;--ink:#E6EAF1;--muted:#97A2B3;--line:#2A3442;--accent:#8197FF;--on:#0E131A;--good:#3DC48A;--warn:#E3A94C;--bad:#F0736B;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 60px max(16px,env(safe-area-inset-left));display:grid;gap:14px}
+h1,h2,h3{margin:0;line-height:1.2}h1{font-size:24px}.m{color:var(--muted)}.s{font-size:14px}
+.c{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0;overflow-wrap:anywhere}
+.r{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.sp{justify-content:space-between}
+button{font:inherit;color:inherit;border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:8px;font-weight:600;cursor:pointer}
+button.p{background:var(--accent);color:var(--on);border-color:var(--accent)}button:disabled{opacity:.5}
+.chip{font-size:12px;font-weight:600;background:var(--sunk);color:var(--muted);padding:2px 8px;border-radius:99px}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.g button{display:grid;padding:10px 4px}.g small{font-weight:400;color:var(--muted);font-size:12px}
+.q{font-size:18px}.a{border-top:1px dashed var(--line);padding-top:10px}
+pre{background:var(--sunk);padding:10px;border-radius:8px;overflow-x:auto}code{font-family:ui-monospace,Menlo,monospace}
+textarea,input{width:100%;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px}
+.bar{height:6px;background:var(--sunk);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
+.note{background:var(--sunk);padding:10px 12px;border-radius:8px;font-size:14px}
+@media(max-width:480px){.g{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="w" id="app"></div>
+<script src="lib/ts-fsrs.umd.js"></script><script src="lib/marked.min.js"></script><script src="lib/purify.min.js"></script>
+<script>
+(function(){
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+  function start(d){window.__D=d;var s=document.createElement('script');s.src='app.js?v=1';document.body.appendChild(s)}
+  var cached=null;try{cached=JSON.parse(localStorage.getItem('atenea-data')||'null')}catch(e){}
+  if(cached){start(cached);return}
+  fetch('data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem('atenea-data',JSON.stringify(d))}catch(e){}start(d)})
+  .catch(function(){document.getElementById('app').innerHTML='<section class="c"><h1>Atenea</h1><p class="m">Aún no hay tarjetas. En Atenea (Claude), ve a Perfil y pulsa “Enviar al celular”; luego abre esta app con internet.</p></section>'});
+})();
+</script></body></html>
